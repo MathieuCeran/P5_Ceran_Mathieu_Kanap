@@ -1,35 +1,30 @@
 // https://qastack.fr/programming/9870512/how-to-obtain-the-query-string-from-the-current-url-with-javascript
 // Ici on recupere l'id du produit depuis l'url avec serachparams
 
-const params = (new URL(document.location)).searchParams;
+const params = (new URL(document.location)).searchParams; // console.log(document.location);
 const id = params.get("_id");
 
 const confirmation = document.querySelector("button");
 const nom = document.getElementById("title");
-const img = document.querySelector(".item__img");
-
 
 
 main();
 
 function main () {
-  getArticleAPI();
   add_To_Cart();
 }
 
 
-
 // ICI on a appele l'api pour récuperer le produit via l'id en fin d'url
-function getArticleAPI () {
-  fetch(`http://localhost:3000/api/products/${id}`)
+
+fetch(`http://localhost:3000/api/products/${id}`)
     .then((response) => response.json())
     .then((data) => product(data))
     .catch((error) => {
       document.querySelector(".item").innerHTML = "<h1>erreur 404</h1>";
       console.log("erreur 404, sur ressource api: " + error);
-    });
-    
-}
+});  
+
   
  // AFFICHAGE D'UN PRODUIT UNIQUE GRACE A SON ID
 
@@ -48,6 +43,7 @@ function product (article) {
   price.innerHTML = `${article.price}`
   description.innerHTML = `${article.description}`
 
+
 // Creation du boucle for of pour afficher autant de fois que l'api nous retourne de couleurs 
   for (let color of article.colors) {
 
@@ -62,44 +58,52 @@ function product (article) {
 
 // FONCTION D'AJOUT  AU PANIER 
 
-function add_To_Cart (article) {
-  
+function add_To_Cart () {
+  // Au click sur le boutin ajouter au panier
   addToCart.onclick = () => {
-
-    // On verifier que la couleur ainsi que la quantité est séléctionné avant de continuer
-    if (quantity.value > 0 && quantity.value < 100 && colors.value != "") {
-
-      // Déclaration des elements a ajouter dans le local
-      const productAdded = {
-        _id: id,
-        colors: colors.value,
-        price: price.innerHTML,
-        quantity: quantity.value,
-        name: nom.innerHTML,
-        img: img
-  
+    let local = JSON.parse(localStorage.getItem("products")); 
+    // si les valeurs ne sont pas rensiegner alors on affiche une alerte
+    if (quantity.value > 0 && quantity.value < 100 && colors.value != ""){
+      if (local == null) { // Si le tableau est vide
+        local = []; // on défini un tableau
+        const productAdded = { // on renseigne les elements qu'on souhaite injecter dans le localstorage
+          _id: id,
+          colors: colors.value,
+          price: price.innerHTML,
+          quantity: quantity.value,
+          name: nom.innerHTML
+        };
+        local.push(productAdded); // on push les elements dans le format string dans le LS
+        localStorage.setItem("products", JSON.stringify(local));
+      } else if (local != null) { // Si le local n'est pas vide
+        for (i = 0; i < local.length; i++){ // on recupere les elements de chaques lignes 
+          console.log(local);
+          if(local[i].id == local.id && local[i].colors == colors.value){ // si l'ID et la couleurs sont les mêmes 
+            return(
+              local[i].quantity++, // alors on inject uniquement la quantité
+              localStorage.setItem("products", JSON.stringify(local)),
+              local = JSON.parse(localStorage.getItem("products")));
+          };
+        };
       };
-
-      let local = [];
-
-      // Si le localStorage existe, on récupère son contenu et on l'envoi dans le tablau local
-      if (localStorage.getItem("products") !== null) {
-        local = JSON.parse(localStorage.getItem("products"));
-      } 
-        // ici on push le produit dans le localstorage si il est vide avec le produit
-        local.push(productAdded);
-        localStorage.setItem("products", JSON.stringify(local));  
-
-        //Style après ajout panier 
-        confirmation.style.visibility = "visible";
-        confirmation.style.background = "green";
-        confirmation.innerHTML = `Vous avez ajouté ${nom.innerHTML} dans votre panier !`;
-        setTimeout("location.reload(true);", 4000);
-    } else {
-      //alerte si quantité <= 0
-      alert ("Merci de verifier la couleur ou la quantité"); 
-    }
-  };
-}
-
-// A améliorer et ajouter un produit de la meme couleur en modifiant seulement la quantité dans le panier dans le localstorage
+      for (i = 0; i < local.length; i++) { // on recupere les elemennts
+        if (local[i].id == local.id && local[i].colors != colors.value){ // si l'ID est le même mais pas la couleur 
+          const productAdded = {
+            _id: id,
+            colors: colors.value,
+            price: price.innerHTML,
+            quantity: quantity.value,
+            name: nom.innerHTML
+          };
+          return (
+      
+            local.push(productAdded), // on push alors un new element en string
+            localStorage.setItem("products", JSON.stringify(local))
+          );
+        };
+      };
+    } else{
+      //Alerte pour signifier que la couleur ou la quantité n'est pas renseigner
+      alert("Merci de verifier la couleur ou la quantité"); 
+    };
+}};
