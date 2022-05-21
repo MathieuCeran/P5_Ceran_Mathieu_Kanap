@@ -10,7 +10,6 @@ fetch ("http://localhost:3000/api/products")
     }
 );
 
-
 // création d'une fonction pour l'affichage des produits sur la page index
 
 function showAllItems(articles) {
@@ -30,8 +29,8 @@ function showAllItems(articles) {
           <p class="productDescription"><b>${article.price} €</b></p>
         </article>
       </a>`;
-    }
-}
+    };
+};
 
 
 

@@ -4,15 +4,7 @@
 const params = (new URL(document.location)).searchParams; // console.log(document.location);
 const id = params.get("_id");
 
-const confirmation = document.querySelector("button");
 const nom = document.getElementById("title");
-
-
-main();
-
-function main () {
-  add_To_Cart();
-}
 
 
 // ICI on a appele l'api pour récuperer le produit via l'id en fin d'url
@@ -25,20 +17,25 @@ fetch(`http://localhost:3000/api/products/${id}`)
       console.log("erreur 404, sur ressource api: " + error);
 });  
 
-  
+main();
+
+function main () {
+  add_To_Cart();
+}
+
  // AFFICHAGE D'UN PRODUIT UNIQUE GRACE A SON ID
 
 function product (article) {
 
   // déclaration des variables, on fait pointer sur l'id du html de chaque elements
-  let image = document.querySelector(".item__img")
+  let image = document.querySelector("article div.item__img")
   let name = document.getElementById("title")
   let price = document.getElementById("price")
   let description = document.getElementById("description")
   let colors = document.getElementById("colors")
 
   // Ici on injecte les données avec innerHtml
-  image.innerHTML = `<img src="${article.imageUrl}">`
+  image.innerHTML = `<img src="${article.imageUrl}" alt="${article.altTxt}">`
   name.innerHTML = `${article.name}`
   price.innerHTML = `${article.price}`
   description.innerHTML = `${article.description}`
