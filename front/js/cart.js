@@ -203,7 +203,7 @@ const validFirstname = function(inputFirstname) {
   //REGEX
   let regexFirstname = new RegExp('^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{2,20}$', 'g');
 
-  if (regexFirstname.test(inputFirstname.value)) {
+  if (regexFirstname.test(inputFirstname.value)) { // si on passe le test regex on continue
     firstnameInfo.innerHTML = `Votre prénom semble correct !`;
     document.getElementById("firstNameErrorMsg").style.color = "green";
     return true;
@@ -226,7 +226,7 @@ const validLastname = function(inputLastname) {
   //REGEX
   let regexLastname = new RegExp('^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{2,20}$', 'g');
 
-  if (regexLastname.test(inputLastname.value)) {
+  if (regexLastname.test(inputLastname.value)) { // si on passe le test regex on continue
     lastnameInfo.innerHTML = `Votre nom semble correct !`;
     document.getElementById("lastNameErrorMsg").style.color = "green";
     return true;
@@ -248,7 +248,7 @@ const validAdress = function(inputAdress) {
   //REGEX
   let regexAdress = new RegExp('^[0-9 a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{5,50}$', 'g');
 
-  if (regexAdress.test(inputAdress.value)) {
+  if (regexAdress.test(inputAdress.value)) { // si on passe le test regex on continue
     adressInfo.innerHTML = `Votre adresse semble correct !`;
     document.getElementById("addressErrorMsg").style.color = "green";
     return true;
@@ -269,7 +269,6 @@ city.addEventListener("change", function () {
 const validCity = function(inputCity) {
   //REGEX
   let regexCity = new RegExp('^[ a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{3,50}$', 'g');
-
   if (regexCity.test(inputCity.value)) { // si on passe le test regex on continue
     cityInfo.innerHTML = `Votre ville semble correct !`;
     document.getElementById("cityErrorMsg").style.color = "green";
