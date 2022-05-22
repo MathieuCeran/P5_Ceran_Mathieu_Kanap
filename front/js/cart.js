@@ -166,15 +166,167 @@ function total() {
   document.getElementById("totalPrice").textContent = totalPrice; // on affiche le prix total du panier
 };
 
+
+
 //////////////////////////////////////////
 // FORMULAIRE
 //////////////////////////////////////////
 
-let client = {};
-localStorage.client = JSON.stringify("client");
 
+// on recupere les elements du html
+//firstname
 const firstname = document.getElementById("firstName");
+const firstnameInfo = document.getElementById("firstNameErrorMsg");
+//lastname
 const lastName = document.getElementById("lastName");
+const lastnameInfo = document.getElementById("lastNameErrorMsg");
+//adress
 const address = document.getElementById("address");
+const adressInfo = document.getElementById("addressErrorMsg");
+//city
 const city = document.getElementById("city");
+const cityInfo = document.getElementById("cityErrorMsg");
+//mail
 const email = document.getElementById("email");
+const emailInfo = document.getElementById("emailErrorMsg")
+// boutton envoyer 
+const buttonSubmit = document.getElementById("order");
+
+//////////////////////////////
+// FIRSTNAME input
+//On ecoute le input de firstanem
+firstname.addEventListener("change", function () {
+  validFirstname(this);
+});
+
+const validFirstname = function(inputFirstname) {
+  //REGEX
+  let regexFirstname = new RegExp('^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{2,20}$', 'g');
+
+  if (regexFirstname.test(inputFirstname.value)) {
+    firstnameInfo.innerHTML = `Votre prénom semble correct !`;
+    document.getElementById("firstNameErrorMsg").style.color = "green";
+    return true;
+  } else {
+    firstnameInfo.innerHTML = `Votre prénom semble incorrect !`;
+    document.getElementById("firstNameErrorMsg").style.color = "red";
+    return false;
+  }
+};
+
+
+//////////////////////////////
+// LASTNAME input
+//On ecoute le input de lastname
+lastName.addEventListener("change", function () {
+  validLastname(this);
+});
+
+const validLastname = function(inputLastname) {
+  //REGEX
+  let regexLastname = new RegExp('^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{2,20}$', 'g');
+
+  if (regexLastname.test(inputLastname.value)) {
+    lastnameInfo.innerHTML = `Votre nom semble correct !`;
+    document.getElementById("lastNameErrorMsg").style.color = "green";
+    return true;
+  } else {
+    lastnameInfo.innerHTML = `Votre nom semble incorrect !`;
+    document.getElementById("lastNameErrorMsg").style.color = "red";
+    return false;
+  }
+};
+
+//////////////////////////////
+// Adresse input
+//On ecoute le input de l'adress
+address.addEventListener("change", function () {
+  validAdress(this);
+});
+
+const validAdress = function(inputAdress) {
+  //REGEX
+  let regexAdress = new RegExp('^[0-9 a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{5,50}$', 'g');
+
+  if (regexAdress.test(inputAdress.value)) {
+    adressInfo.innerHTML = `Votre adresse semble correct !`;
+    document.getElementById("addressErrorMsg").style.color = "green";
+    return true;
+  } else {
+    adressInfo.innerHTML = `Votre adresse semble incorrect !`;
+    document.getElementById("addressErrorMsg").style.color = "red";
+    return false;
+  }
+};
+
+//////////////////////////////
+// city input
+//On ecoute le input de city
+city.addEventListener("change", function () {
+  validCity(this);
+});
+
+const validCity = function(inputCity) {
+  //REGEX
+  let regexCity = new RegExp('^[ a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.-]{3,50}$', 'g');
+
+  if (regexCity.test(inputCity.value)) { // si on passe le test regex on continue
+    cityInfo.innerHTML = `Votre ville semble correct !`;
+    document.getElementById("cityErrorMsg").style.color = "green";
+    return true;
+  } else {
+    cityInfo.innerHTML = `Votre ville semble incorrect !`;
+    document.getElementById("cityErrorMsg").style.color = "red";
+    return false;
+  }
+};
+
+//////////////////////////////
+//EMAIL input
+//On ecoute le input du mail
+email.addEventListener("change", function () {
+  validEmail(this);
+});
+
+const validEmail = function(inputEmail) {
+  //REGEX
+  let regexMail = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+  // On test si les caracteres sont valides
+  if (regexMail.test(inputEmail.value)) {
+    emailInfo.innerHTML = `Votre email semble correct !`;
+    document.getElementById("emailErrorMsg").style.color = "green";
+    return true;
+  } else {
+    emailInfo.innerHTML = `Votre email semble incorrect !`;
+    document.getElementById("emailErrorMsg").style.color = "red";
+    return false;
+  }
+};
+
+//////////////////////////////////////////
+// FORMULAIRE ENVOI DES INFORMATIONS CLIENT
+//////////////////////////////////////////
+// on lance une fonction au click sur le bouton envoyer et on verifie que toutes les infos soient valide avec regex
+buttonSubmit.addEventListener("click", function () { // on ecoute le bouton
+   // si toutes les validations regex sont OK alors on envoi dans le localStorage
+  if (validFirstname(firstname) && validEmail(email) && validLastname(lastName) && validCity(city) && validAdress(address)){
+      let local = JSON.parse(localStorage.getItem("client"));
+      local = [];
+      const client = { // on renseigne les elements qu'on souhaite injecter dans le localstorage
+        firstname: firstname.value,
+        lastname: lastName.value,
+        adress: address.value,
+        city: city.value,
+        mail: email.value
+      };
+      local.push(client); // on push les elements dans le format string dans le LS
+      localStorage.setItem("client", JSON.stringify(local));
+      console.log("OK");
+      document.getElementById("order").value = "Nous envoyons votre commande...";
+  } else { // sinon on indique a l'utilisateur de reessayer en modifiant les infos personnels
+    console.log("false");
+    document.getElementById("order").value = "Réessayer";
+    }
+  });
+
+

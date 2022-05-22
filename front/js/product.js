@@ -29,14 +29,12 @@ function product (article) {
 
   // déclaration des variables, on fait pointer sur l'id du html de chaque elements
   let image = document.querySelector("article div.item__img")
-  let name = document.getElementById("title")
   let price = document.getElementById("price")
   let description = document.getElementById("description")
   let colors = document.getElementById("colors")
 
   // Ici on injecte les données avec innerHtml
   image.innerHTML = `<img src="${article.imageUrl}" alt="${article.altTxt}">`
-  name.innerHTML = `${article.name}`
   price.innerHTML = `${article.price}`
   description.innerHTML = `${article.description}`
 
@@ -67,8 +65,7 @@ function add_To_Cart () {
           _id: id,
           colors: colors.value,
           price: price.innerHTML,
-          quantity: quantity.value,
-          name: nom.innerHTML
+          quantity: quantity.value
         };
         local.push(productAdded); // on push les elements dans le format string dans le LS
         localStorage.setItem("products", JSON.stringify(local));
@@ -89,8 +86,7 @@ function add_To_Cart () {
             _id: id,
             colors: colors.value,
             price: price.innerHTML,
-            quantity: quantity.value,
-            name: nom.innerHTML
+            quantity: quantity.value
           };
           return (
       
