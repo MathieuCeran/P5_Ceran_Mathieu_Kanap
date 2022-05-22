@@ -22,7 +22,7 @@ fetch("http://localhost:3000/api/products")
 function showBasket(index) {
   // on récupère le panier converti
   let basket = JSON.parse(localStorage.getItem("products"));
-  // si il y a un panier avec une taille differante de 0 (donc supérieure à 0)
+  // si il y a un panier qui n'est pas égal à 0
   if (basket && basket.length != 0) {
     // zone de correspondance clef/valeur de l'api et du panier
     for (let product of basket) {
@@ -309,23 +309,56 @@ const validEmail = function(inputEmail) {
 buttonSubmit.addEventListener("click", function () { // on ecoute le bouton
    // si toutes les validations regex sont OK alors on envoi dans le localStorage
   if (validFirstname(firstname) && validEmail(email) && validLastname(lastName) && validCity(city) && validAdress(address)){
-      let local = JSON.parse(localStorage.getItem("client"));
-      local = [];
-      const client = { // on renseigne les elements qu'on souhaite injecter dans le localstorage
-        firstname: firstname.value,
-        lastname: lastName.value,
-        adress: address.value,
-        city: city.value,
-        mail: email.value
-      };
-      local.push(client); // on push les elements dans le format string dans le LS
-      localStorage.setItem("client", JSON.stringify(local));
-      console.log("OK");
-      document.getElementById("order").value = "Nous envoyons votre commande...";
-  } else { // sinon on indique a l'utilisateur de reessayer en modifiant les infos personnels
-    console.log("false");
-    document.getElementById("order").value = "Réessayer";
+      infoClient(); // on appele la fonction infoclient
+    } else { // sinon on indique a l'utilisateur de reessayer en modifiant les infos personnels
+      console.log("false");
+      document.getElementById("order").value = "Réessayer";
     }
   });
 
+
+  // Fonction pour envoyer les informations + panier client au localstorage
+function infoClient () {
+  let local = JSON.parse(localStorage.getItem("client"));
+      local = [];
+      const client = { // on renseigne les elements qu'on souhaite injecter dans le localstorage
+        firstName: firstname.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value
+      };
+      order(client); // on integre le fonction order a l'aquel on applique client pour push tous les paquets ( client + products)
+      local.push(client); // on push les elements dans le format string dans le LS
+      localStorage.setItem("client", JSON.stringify(local)); // on stringify pour le json
+      console.log("OK");
+      document.getElementById("addToCart").innerHTML = "Nous envoyons votre commande...";
+};
+
+
+
+// function qui va permettre de recuperer le contact tableau et produit tableau
+function order (contact) {
+  let basket = JSON.parse(localStorage.getItem("products")); // on recupere le tableau products du LS
+  let products = []; // on créer un tableau vide prodcts
+  
+  for(i = 0; i < basket.length; i++){ 
+    products.push(basket[i]._id)
+  }
+
+  const data = {contact, products}
+  console.log(data);
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+          "content-type" : "application/json",
+      }   
+    })
+    .then(res => res.json())
+    .then(result => {
+      window.location.href = `confirmation.html?order=${result.orderId}`;
+      console.log(result.orderId)
+    })
+  }
 
