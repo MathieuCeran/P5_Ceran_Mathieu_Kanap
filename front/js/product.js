@@ -69,11 +69,12 @@ function add_To_Cart () {
         };
         local.push(productAdded); // on push les elements dans le format string dans le LS
         localStorage.setItem("products", JSON.stringify(local));
-        document.getElementById("addToCart").innerHTML = "Produit ajouté au panier";
+        alert("Produit ajouté au panier");
       } else if (local != null) { // Si le local n'est pas vide
         for (i = 0; i < local.length; i++){ // on recupere les elements de chaques lignes 
           console.log(local);
           if(local[i].id == local.id && local[i].colors == colors.value){ // si l'ID et la couleurs sont les mêmes 
+            alert("Produit ajouté au panier");
             return(
               local[i].quantity++, // alors on inject uniquement la quantité
               localStorage.setItem("products", JSON.stringify(local)),
@@ -89,7 +90,8 @@ function add_To_Cart () {
             price: price.innerHTML,
             quantity: quantity.value
           };
-          document.getElementById("addToCart").innerHTML = "Produit ajouté au panier";
+          // document.getElementById("addToCart").innerHTML = "Produit ajouté au panier";
+          alert("Produit ajouté au panier");
           return (
             local.push(productAdded), // on push alors un new element en string
             localStorage.setItem("products", JSON.stringify(local))

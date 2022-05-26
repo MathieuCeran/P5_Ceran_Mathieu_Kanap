@@ -7,6 +7,7 @@ const id = params.get("order");
 if (params.has("order")) {
     let orderId = document.getElementById("orderId");
     orderId.innerHTML = `<br /><br />`+ id;
+    localStorage.clear(); // on vide le local storage
 } else {
     console.log("KO");
 }
